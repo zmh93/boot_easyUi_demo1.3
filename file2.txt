@@ -1,4 +1,0 @@
-this is file2
-this is in dev2
-
-commit or stash your files before checkout branches
