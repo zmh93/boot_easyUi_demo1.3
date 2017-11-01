@@ -31,4 +31,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public void delete(Long id) {
         employeeMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public void save(String name, String age, String email, Long did) {
+        employeeMapper.insert(name, age, email, did);
+    }
+
+    @Override
+    public void update(Long id, String name, String age, String email, Long did) {
+        employeeMapper.update(id, name, age, email, did);
+    }
 }

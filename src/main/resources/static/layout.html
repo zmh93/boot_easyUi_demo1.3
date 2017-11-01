@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>layout</title>
+    <link rel="stylesheet" type="text/css" href="../../easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../../easyui/themes/color.css">
+    <script type="text/javascript" src="../../easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#menu").tree({
+                url:"menu",
+                onClick:function (node) {
+                    if($("#tt").tabs("exists",node.text)){
+                        $("#tt").tabs("select", node.text);
+                    }else {
+                        $("#tt").tabs("add",{
+                            title: node.text,
+                            closable: true,
+                            content:"<iframe frameborder='0' width='100%' height='100%' src='"+node.url+"'></iframe>"
+                        });
+                    }
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" style="width:600px;height:400px;" data-options="fit:true">
+    <div data-options="region:'north'" style="height:100px;background-image:url('1.jpg');">
+        <h1 align="center">广州小马哥员工信息</h1>
+    </div>
+    <div data-options="region:'south'" style="height:60px;background-image:url('1.jpg');">
+        <h4 align="right">版权:广州小马哥</h4>
+    </div>
+    <div data-options="region:'west'" style="width:100px;">
+        <ul id="menu"></ul>
+    </div>
+    <div data-options="region:'center'" style="padding:5px;background:#eee;">
+        <div id="tt" class="easyui-tabs" data-options="fit:true">
+            <div id="wlc" class="easyui-tabs" data-options="title:'欢迎光临',fit:true,closable:true"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -9,4 +9,8 @@ public interface IEmployeeService {
     Map<Object,Object> query(QueryObject qo);
 
     void delete(Long id);
+
+    void save(String name, String age, String email, Long did);
+
+    void update(Long id, String name, String age, String email, Long did);
 }

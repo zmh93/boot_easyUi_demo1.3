@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example3.demo3.dao.EmployeeMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert employee(name,age,email,dept_id)
+        values(#{name},#{age},#{email},#{did})
+    </insert>
+    <update id="update">
+        update employee
+        set name = #{name},age=#{age},email=#{email},dept_id=#{did}
+        where id = #{id}
+    </update>
     <select id="queryForList" resultType="map">
         select e.id,e.name,e.age,e.email,d.name as dname,d.id as did
         from employee as e left join department as d

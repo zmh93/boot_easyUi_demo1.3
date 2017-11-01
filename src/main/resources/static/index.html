@@ -10,34 +10,127 @@
     <script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
-       $(function () {
-           $("#myTable").datagrid({
-               url:"/list",
-               fit:true,
-               fitColumns:true,
-               singleSelected:true,
-               rownumbers:true,
-               pagination:true,
-               columns:[[
-                   {field:"name",title:"姓名",width:100,align:"center"},
-                   {field:"age",title:"年龄",width:100,align:"center"},
-                   {field:"email",title:"邮箱",width:100,align:"center"},
-                   {field:"dname",title:"部门",width:100,align:"center"}
-               ]],
-               toolbar:"#bt"
-           })
-       })
+        $(function () {
+            $("#myTable").datagrid({
+                url: "/list",
+                fit: true,
+                fitColumns: true,
+                singleSelect: true,
+                rownumbers: true,
+                pagination: true,
+                columns: [[
+                    {field: "name", title: "姓名", width: 100, align: "center"},
+                    {field: "age", title: "年龄", width: 100, align: "center"},
+                    {field: "email", title: "邮箱", width: 100, align: "center"},
+                    {field: "dname", title: "部门", width: 100, align: "center"}
+                ]],
+                toolbar: "#bt"
+            });
+            $('#ff').form({
+                url: "/save",
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            $("#employee_dialog").dialog({
+                title: "员工添加",
+                width: 300,
+                height: 250,
+                closed: true,
+                footer: "#bt2"
+            })
+        });
+
+        function remove() {
+            var x = $("#myTable").datagrid("getSelected");
+            if (x == null) {
+                $.messager.alert("提醒", "请选择", "warning", function () {
+                    window.location.reload(true);
+                })
+            }
+            $.post("/delete", {id: x.id}, function (data) {
+                $.messager.alert("提醒", data.msg, "warning", function () {
+                    window.location.reload(true);
+                })
+            })
+        }
+
+        function save() {
+            $("#ff").form("clear").form("load", {title: "员工添加"});
+            $("#employee_dialog").dialog("open");
+        }
+
+        function reload() {
+            window.location.reload(true);
+        }
+
+        function sbmt() {
+            $("#ff").form("submit", {
+                success: function (data) {
+                    var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                    if (data.success) {
+                        $.messager.alert("提示", data.msg, "warning", function (r) {
+                            window.location.reload(true);
+                        })
+                    }
+                }
+            })
+        }
+
+        function cancel() {
+            window.location.reload(true);
+        }
+
+        function edit() {
+            var x = $("#myTable").datagrid("getSelected");
+            if (x == null) {
+                $.messager.alert("提醒","请选择","warning",function () {
+                    window.location.reload(true);
+                })
+            }
+            $("#ff").form("load",x).form("load",{title:"员工编辑"});
+            $("#employee_dialog").dialog("open");
+        }
     </script>
 </head>
 <body>
 <table id="myTable"></table>
 <div id="bt">
     <div>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="save()">添加</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"
+           onclick="edit()">编辑</a>
         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
-           onclick="remove()"></a>
+           onclick="remove()">删除</a>
         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true"
-           onclick="reload()"></a>
+           onclick="reload()">刷新</a>
     </div>
+</div>
+<div id="employee_dialog">
+    <form id="ff" method="post">
+        <div style="margin: 20px;">
+            <input type="hidden" name="id"/>
+            <input class="easyui-textbox" type="text" name="name"
+                   data-options="required:true,label:'姓名',labelwidth:30,width:200,align:'center'"/>
+        </div>
+        <div style="margin: 20px;">
+            <input class="easyui-textbox" type="text" name="age"
+                   data-options="required:true,label:'年龄',labelwidth:30,width:200,align:'center'"/>
+        </div>
+        <div style="margin: 20px;">
+            <input class="easyui-textbox" type="text" name="email"
+                   data-options="required:true,label:'邮箱',labelwidth:30,width:200,align:'center'"/>
+        </div>
+        <div style="margin: 20px;">
+            <input class="easyui-combobox" type="text" name="did"
+                   data-options="required:true,valueField:'did',textField:'dname',label:'部门',labelwidth:30,width:200,align:'center',url:'/departments',align:'center'"/>
+        </div>
+    </form>
+</div>
+<div id="bt2" align="right">
+    <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="sbmt()">提交</a>
+    <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="cancel()">取消</a>
 </div>
 </body>
 </html>
