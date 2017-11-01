@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example3.demo3.dao.EmployeeMapper">
+    <select id="queryForList" resultType="map">
+        select e.id,e.name,e.age,e.email,d.name as dname,d.id as did
+        from employee as e left join department as d
+            on d.id = e.dept_id
+        limit #{start},#{rows}
+    </select>
+    <select id="queryForCount" resultType="int">
+        select count(*) from employee
+    </select>
+    <delete id="deleteByPrimaryKey">
+        delete from employee where id = #{id}
+    </delete>
+</mapper>
